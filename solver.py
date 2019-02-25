@@ -1,4 +1,4 @@
-import piece_locations as ploc 
+import aristotle.piece_locations as ploc 
 import numpy as np
 
 def validate(*args):
