@@ -4,10 +4,10 @@ import numpy as np
 def validate(*args):
     pass
 
-def check_horizontal_rows(df):
+def check_horizontal_rows(df, ans):
     checks = []
     for i in range(df.shape[0]):
-        checks.append(sum(df[i]) == 38)
+        checks.append(sum(df[i]) == ans)
     return checks
 
 def check_diag_rows(df, direction):
@@ -25,10 +25,15 @@ def check_diag_rows(df, direction):
     else:
         raise(ValueError, directionError)
 
-    #
+    # 
 
 
+### VARIABLES ###
+ans = 38            # value that each row needs to sum up to
+x = 5               # number of horizontal rows
+y = x * 2 - 1       # number of columns after spacing out values
+numOfPieces = 19    # number of pieces given in the puzzle
 
-
-df = np.zeros((5,9))
-pieces = list(range(1,19+1))
+### MAIN ###
+df = np.zeros((x,y))
+pieces = list(range(1, numOfPieces+1))
