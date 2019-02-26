@@ -2,13 +2,31 @@ import aristotle.piece_locations as ploc
 import numpy as np
 import math
 
-def validate(probabilities):
-    # probabilities must be of type list
-    # 
+def validate(probabilities, shape=(5,9), ans=38):
+    #  ERROR CHECKING:
+    ## probabilities must be of type list
+    ## length of probabilities must correspond with the number of pieces in the puzzle
     if not isinstance(probabilities, list): 
         raise(TypeError, 'Argument "probabilities" must be of type list.')
+    if not isinstance(shape, tuple):
+        raise(TypeError, 'Argument "shape" must be of type tuple.')
+    if len(probabilities) != 19: print('WARNING: Probabilities list is not of default length 19')
+    if ans != 38: print('WARNING: ans is not set to the default value of 38')
     
-    pieces = list(range(1,len(probabilities)+1))
+    # change 100% probabilities to 99.99% probabilities to avoid IndexError
+    for val in range(0, len(probabilities)):
+        if probabilities[val] == 1: probabilities[val] = .9999
+
+    initialPieces = list(range(1,len(probabilities)+1)) # generate puzzle pieces
+    selectedPieces = []
+
+    # select pieces to place
+    for prob in probabilities:
+        selectedPieces.append(initialPieces.pop(math.floor(prob*len(initialPieces))))
+
+    # place selected pieces onto board
+    df = np.zeros(shape)
+
 
 def check_horizontal_rows(df, ans):
     checks = []
