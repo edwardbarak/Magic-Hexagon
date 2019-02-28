@@ -2,6 +2,28 @@ import aristotle.piece_locations as ploc
 import numpy as np
 import math
 
+def hexagonRadius(probabilities):
+    piecesError = 'Improper number of pieces to create a hexagon'
+    pieces = len(probabilities)
+    
+    a = 3
+    b = 3
+    c = -1 * pieces
+
+    # Quadratic equation to solve hexagon radius. Units is number of hexagons
+    # calculate the discriminant
+    d = (b**2) - (4*a*c)
+    
+    # find radius
+    solutions = [(-b-cmath.sqrt(d))/(2*a), (-b+cmath.sqrt(d))/(2*a)]
+    positiveSolutions = [i for i in solutions if i >= 0]
+    isPositiveInt = [i % 1 == 0 for i in positiveSolutions]
+    if True in isPositiveInt:
+        radius = positiveSolutions[isPositiveInt.index(True)]
+        return radius
+    else:
+        raise(IndexError, piecesError)
+
 def validate(probabilities, shape=(5,9), ans=38):
     #  ERROR CHECKING:
     ## probabilities must be of type list
@@ -26,6 +48,8 @@ def validate(probabilities, shape=(5,9), ans=38):
 
     # place selected pieces onto board
     df = np.zeros(shape)
+    centerPiece = math.ceil(len(probabilities)/2)
+    # TODO: map locations of selectedPieces to df
 
 
 def check_horizontal_rows(df, ans):
