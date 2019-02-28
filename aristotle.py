@@ -1,4 +1,3 @@
-import aristotle.piece_locations as ploc 
 import numpy as np
 import math
 
@@ -8,30 +7,30 @@ def hexagonRadius(probabilities):
     
     a = 3
     b = 3
-    c = -1 * pieces
+    c = -1 * (pieces-1)
 
     # Quadratic equation to solve hexagon radius. Units is number of hexagons
     # calculate the discriminant
     d = (b**2) - (4*a*c)
     
     # find radius
-    solutions = [(-b-cmath.sqrt(d))/(2*a), (-b+cmath.sqrt(d))/(2*a)]
+    solutions = [(-b-math.sqrt(d))/(2*a), (-b+math.sqrt(d))/(2*a)]
     positiveSolutions = [i for i in solutions if i >= 0]
     isPositiveInt = [i % 1 == 0 for i in positiveSolutions]
     if True in isPositiveInt:
         radius = positiveSolutions[isPositiveInt.index(True)]
         return radius
     else:
-        raise(IndexError, piecesError)
+        raise Exception(piecesError)
 
 def validate(probabilities, shape=(5,9), ans=38):
     #  ERROR CHECKING:
     ## probabilities must be of type list
     ## length of probabilities must correspond with the number of pieces in the puzzle
     if not isinstance(probabilities, list): 
-        raise(TypeError, 'Argument "probabilities" must be of type list.')
+        raise Exception('Argument "probabilities" must be of type list.')
     if not isinstance(shape, tuple):
-        raise(TypeError, 'Argument "shape" must be of type tuple.')
+        raise Exception('Argument "shape" must be of type tuple.')
     if len(probabilities) != 19: print('WARNING: Probabilities list is not of default length 19')
     if ans != 38: print('WARNING: ans is not set to the default value of 38')
     
@@ -50,7 +49,7 @@ def validate(probabilities, shape=(5,9), ans=38):
     df = np.zeros(shape)
     centerPiece = math.ceil(len(probabilities)/2)
     # TODO: map locations of selectedPieces to df
-
+    
 
 def check_horizontal_rows(df, ans):
     checks = []
@@ -68,7 +67,7 @@ def check_diag_rows(df, direction, ans):
     # 3.   Then each subsequent value is {ul: (-2,0), ur: (2,0)} from the previous value, until the next subsequent value is 0 OR reached x floor/ceiling
     
     # Step 1. 
-    if direction not in ['ul','ur']: raise(ValueError, directionError)
+    if direction not in ['ul','ur']: raise Exception(directionError)
     if direction == 'ul':
         diagStep = -1
         horizStep = -2
@@ -80,7 +79,7 @@ def check_diag_rows(df, direction, ans):
         xstart = df.shape[1]
         xend = -1 # 0 - 1 = -1
     else:
-        raise(ValueError, directionError)
+        raise Exception(directionError)
 
     ystart = math.floor(df.shape[0] / 2) # Find first y value. First y value is always going to be floor of df.shape[0]/2, which is the center y coordinate
     
@@ -105,7 +104,7 @@ def diag_row_sum(y, x, df, direction, ans):
     elif direction == 'ur': 
         xstep = -1
     else: 
-        raise(ValueError, directionError)
+        raise Exception(directionError)
        
     for i in range(y, 0 - 1, -1):
         nums.append(df[i,x])
