@@ -1,6 +1,22 @@
 import numpy as np
 import math
 
+"""
+def generateProbabilities(unitType, units):
+    # generate an array of probabilities, with length = num of pieces in final hexagon. 
+    # As of now, this function is not yet required, and should be removed during the next refactoring.
+    unitTypeError = 'Argument "unitType" must be string "pieces" or "radius"'
+    unitType = unitType.lower()
+    unitTypeOptions = ['pieces', 'radius']
+    if unitType in unitTypeOptions:
+        if unitType == 'pieces':
+        # TODO: return  
+        elif unitType == 'radius':
+        # TODO: 
+    else:
+        raise Exception(unitTypeError)
+"""
+
 def hexagonRadius(probabilities):
     piecesError = 'Improper number of pieces to create a hexagon'
     pieces = len(probabilities)
@@ -23,7 +39,21 @@ def hexagonRadius(probabilities):
     else:
         raise Exception(piecesError)
 
+def hexagonRadiusToPieces(radius):
+    """Radius of final hexagon is determined by how many pieces does it take in one direction to get to the edge of the final hexagon? Excluding the center piece.
+
+    Examples:
+    (hexagon radius, hexagon pieces)
+    (0, 1)  Only the center piece
+    (1, 7)  6 pieces adjacent to the center piece
+    (2, 19) Configuration of final hexagon in Aristotle's puzzle
+    """
+    r = radius
+    return 3 * r * (r + 1) + 1
+
 def validate(probabilities, shape=(5,9), ans=38):
+    # TODO: Extrapolate shape and ans from len(probabilities), then remove function arguments shape and ans.
+
     #  ERROR CHECKING:
     ## probabilities must be of type list
     ## length of probabilities must correspond with the number of pieces in the puzzle
@@ -43,7 +73,8 @@ def validate(probabilities, shape=(5,9), ans=38):
 
     # select pieces to place
     for prob in probabilities:
-        selectedPieces.append(initialPieces.pop(math.floor(prob*len(initialPieces))))
+        selectionIndex = math.floor(prob*len(initialPieces))
+        selectedPieces.append(initialPieces.pop(selectionIndex))
 
     # place selected pieces onto board
     df = np.zeros(shape)
@@ -60,6 +91,7 @@ def check_horizontal_rows(df, ans):
 
 def check_diag_rows(df, direction, ans):
     checks = []
+    direction = direction.lower()
     directionError = 'Direction must be either "ul" (up left) or "ur" (up right)'
     
     # 1.   Check y value of first value from the {ul: right, ur: left}
@@ -96,6 +128,7 @@ def check_diag_rows(df, direction, ans):
 
 def diag_row_sum(y, x, df, direction, ans):
     # Sums up a diagonal row
+    direction = direction.lower()
     nums = []
 
     directionError = 'Direction must be either "ul" (up left) or "ur" (up right)'
