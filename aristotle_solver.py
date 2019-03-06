@@ -1,7 +1,7 @@
 import numpy as np
 from math import floor
 
-class puzzle(placements, placeType):
+class puzzle:
     rowCoords = [
         [(0,i) for i in range(2,6+1,2)],
         [(1,i) for i in range(1,7+1,2)],
