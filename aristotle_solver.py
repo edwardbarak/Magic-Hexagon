@@ -1,19 +1,7 @@
 import numpy as np
 from math import floor
 
-class puzzle:
-    rowCoords = [
-        [(0,i) for i in range(2,6+1,2)],
-        [(1,i) for i in range(1,7+1,2)],
-        [(2,i) for i in range(0,8+1,2)],
-        [(3,i) for i in range(1,7+1,2)],
-        [(4,i) for i in range(2,6+1,2)],
-    ]
-    ringCoords = [
-        [rowCoords[i][0] for i in range(0,5)] + [rowCoords[4][1]] + [rowCoords[i][-1] for i in range(4,0-1,-1)] + [rowCoords[0][1]],
-        [rowCoords[i][1] for i in range(1,3+1)] + [rowCoords[i][-2] for i in range(3,1-1,-1)],
-    ]
-    
+class puzzle():
     def __init__(self, placements, placeType):
         # determine input mehtod
         if placeType == 'percentage':
@@ -54,7 +42,31 @@ class puzzle:
         else:
             raise Exception('placeType must be string "percentage" or "input"')
 
-        self.board = np.zeros((5,9))
+        # initialize variables
+        # coordinates for every piece in every row on the board, starting from left most piece of the top row
+        self.rowCoords = [
+            [(0,i) for i in range(2,6+1,2)],
+            [(1,i) for i in range(1,7+1,2)],
+            [(2,i) for i in range(0,8+1,2)],
+            [(3,i) for i in range(1,7+1,2)],
+            [(4,i) for i in range(2,6+1,2)],
+        ]
+
+        # coordinates for every piece in every ring on the board, from outer to inner
+        self.ringCoords = [
+            [self.rowCoords[i][0] for i in range(0,5)] + [self.rowCoords[4][1]] + [self.rowCoords[i][-1] for i in range(4,0-1,-1)] + [self.rowCoords[0][1]],
+            [self.rowCoords[i][1] for i in range(1,3+1)] + [self.rowCoords[i][-2] for i in range(3,1-1,-1)],
+        ]
+
+        self.board = np.zeros((5,9))    # generate empty puzzle board.        
+        
+        # place self.pieces onto self.board
+        self.allCoords = []
+        for row in self.rowCoords:
+            self.allCoords += row
+        self.coords = zip(self.pieces, self.allCoords)
+        for pair in self.coords:
+            self.board[pair[1]] = pair[0]
 
     def check_row_sums(self):
         return [sum(self.board[i]) == 38 for i in range(0, self.board.shape[0])]
@@ -63,3 +75,5 @@ class puzzle:
     def rotate_board(self):
         newBoard = np.zeros((5,9))
         rotateInstr = zip()
+        # NOTE: rotation can be done using self.ringCoords as a map, and shifting self.board[ring[i]] to self.board[ring[i+2]] 
+        # NOTE: i+2 for outer ring, i+1 for inner ring
