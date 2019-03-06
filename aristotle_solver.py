@@ -48,7 +48,7 @@ class puzzle(placements, placeType):
             self.pieces = placements
             
             # validate self.pieces
-            if sorted(self.pieces) != list(range(19+1)):
+            if sorted(self.pieces) != list(range(1,19+1)):
                 raise Exception('Placements must be some arrangement of values in range(19+1)')
 
         else:
