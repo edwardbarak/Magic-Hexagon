@@ -15,6 +15,7 @@ class puzzle(placements, placeType):
     ]
     
     def __init__(self, placements, placeType):
+        # determine input mehtod
         if placeType == 'percentage':
             self.placements = placements
             
@@ -24,6 +25,21 @@ class puzzle(placements, placeType):
             if sum(self.placements[i] >= 0 and self.placements[i] <= 1 for i in range(19)) != 19:
                 raise Exception('All values in placements must >= 0, and <= 1')
             
+            # place pieces according to percentages.
+            # EXAMPLE:
+            # >>>   initialPieces = [1,2,3]
+            # >>>   placements = [.2, .9, .9]
+            # >>>   pieces = []
+            # results after first placement:
+            # >>>   initialPieces 
+            # [2,3]
+            # >>>   pieces
+            # [1]
+            # results after second placement:
+            # >>>   initialPieces
+            # [2]
+            # >>>   pieces
+            # [1,3]
             self.initPieces = list(range(1,19+1)) 
             self.pieces = [self.initPieces.pop(floor(len(self.initPieces) * place)) for place in self.placements]
             del self.initPieces
