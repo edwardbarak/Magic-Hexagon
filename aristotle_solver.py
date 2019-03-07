@@ -87,5 +87,13 @@ class puzzle():
 
         self.board = self.newBoard
 
+    def validate(self):
+        self.tests = self.check_row_sums()
+        self.rotate_board()
+        self.tests += self.check_row_sums()
+        self.rotate_board()
+        self.tests += self.check_row_sums()
+        return {'score': sum(self.tests) / len(self.tests), 'tests': self.tests}
+        
 if __name__ == "__main__":
     pass
