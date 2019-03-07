@@ -3,45 +3,46 @@ import random
 from math import floor
 
 class puzzle():
-    def __init__(self, placements, placeType):
+    def __init__(self, placements):
         # determine input mehtod
-        if placeType == 'percentage':
-            self.placements = placements
+        # if placeType == 'percentage':
+        #     self.placements = placements
             
-            # validate self.placements
-            if len(self.placements) != 19:
-                raise Exception('Expected length of placements to be 19 instead of %i' % len(self.placements))
-            if not all([val >= 0 and val <= 1 for val in self.placements]):
-                raise Exception('All values in placements must >= 0, and <= 1')
+        #     # validate self.placements
+        #     if len(self.placements) != 19:
+        #         raise Exception('Expected length of placements to be 19 instead of %i' % len(self.placements))
             
-            # place pieces according to percentages.
-            # EXAMPLE:
-            # >>>   initialPieces = [1,2,3]
-            # >>>   placements = [.2, .9, .9]
-            # >>>   pieces = []
-            # results after first placement:
-            # >>>   initialPieces 
-            # [2,3]
-            # >>>   pieces
-            # [1]
-            # results after second placement:
-            # >>>   initialPieces
-            # [2]
-            # >>>   pieces
-            # [1,3]
-            self.initPieces = list(range(1,19+1)) 
-            self.pieces = [self.initPieces.pop(floor(len(self.initPieces) * place)) for place in self.placements]
-            del self.initPieces
+        #     if not all([val >= 0 and val <= 1 for val in self.placements]):
+        #         raise Exception('All values in placements must >= 0, and <= 1')
+            
+        #     # place pieces according to percentages.
+        #     # EXAMPLE:
+        #     # >>>   initialPieces = [1,2,3]
+        #     # >>>   placements = [.2, .9, .9]
+        #     # >>>   pieces = []
+        #     # results after first placement:
+        #     # >>>   initialPieces 
+        #     # [2,3]
+        #     # >>>   pieces
+        #     # [1]
+        #     # results after second placement:
+        #     # >>>   initialPieces
+        #     # [2]
+        #     # >>>   pieces
+        #     # [1,3]
+        #     self.initPieces = list(range(1,19+1)) 
+        #     self.pieces = [self.initPieces.pop(floor(len(self.initPieces) * place)) for place in self.placements]
+        #     del self.initPieces
 
-        elif placeType == 'input':
-            self.pieces = placements
-            
-            # validate self.pieces
-            if sorted(self.pieces) != list(range(1,19+1)):
-                raise Exception('Placements must be some arrangement of values in range(19+1)')
+        # elif placeType == 'input':
+        self.pieces = placements
+        
+        # validate self.pieces
+        if sorted(self.pieces) != list(range(1,19+1)):
+            raise Exception('Placements must be some arrangement of values in range(19+1)')
 
-        else:
-            raise Exception('placeType must be string "percentage" or "input"')
+        # else:
+        #     raise Exception('placeType must be string "percentage" or "input"')
 
         # initialize variables
         # coordinates for every piece in every row on the board, starting from left most piece of the top row
@@ -95,6 +96,27 @@ class puzzle():
         self.rotate_board()
         self.tests += self.check_row_sums()
         return {'score': sum(self.tests) / len(self.tests), 'tests': self.tests}
+
+def optimizer(f='optimization_history.psv'):
+    # EXPECTS PIPE DELIMITATION 
+    # if file exists at path 'f':
+        # continue optimization from last entry
+        # continue appending results to f
+    # else:
+        # create pipe seperated values file at path 'f' with headers: score | piece_order | weights | learning_rate
+        # generate random percentage weights
+    weights = [random.uniform(0,1) for i in range(19)]
+        # generate pieces 1 through 19
+    initPieces = list(range(1,19+1))
+        # order pieces according to percentage weights
+    pieces = [initPieces.pop(floor(len(initPieces) * weight)) for weight in weights]
+    
+    # place pieces on board in designated order
+    currentBoard = puzzle(pieces)
+    # test designated order
+    result = currentBoard.validate()
+    # write results to path 'f' in .psv format
+
 
 if __name__ == "__main__":
     pass
