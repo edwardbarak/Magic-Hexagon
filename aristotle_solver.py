@@ -58,7 +58,7 @@ class puzzle():
             [self.rowCoords[i][1] for i in range(1,3+1)] + [self.rowCoords[i][-2] for i in range(3,1-1,-1)],
         ]
         self.ringCoords[0] = self.ringCoords[0] + self.ringCoords[0][:2] # make outer ring loopback
-        self.ringCoords[1] = self.ringCoords[1] + self.ringCoords[1][0]  # make inner ring loopback
+        self.ringCoords[1] = self.ringCoords[1] + [self.ringCoords[1][0]]  # make inner ring loopback
 
         self.board = np.zeros((5,9))    # generate empty puzzle board.        
         
@@ -94,6 +94,6 @@ class puzzle():
         self.rotate_board()
         self.tests += self.check_row_sums()
         return {'score': sum(self.tests) / len(self.tests), 'tests': self.tests}
-        
+
 if __name__ == "__main__":
     pass
