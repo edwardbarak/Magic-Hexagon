@@ -1,4 +1,5 @@
 import numpy as np
+import random
 from math import floor
 
 class puzzle():
@@ -10,7 +11,7 @@ class puzzle():
             # validate self.placements
             if len(self.placements) != 19:
                 raise Exception('Expected length of placements to be 19 instead of %i' % len(self.placements))
-            if sum(self.placements[i] >= 0 and self.placements[i] <= 1 for i in range(19)) != 19:
+            if not all([val >= 0 and val <= 1 for val in self.placements]):
                 raise Exception('All values in placements must >= 0, and <= 1')
             
             # place pieces according to percentages.
