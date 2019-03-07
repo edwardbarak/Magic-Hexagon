@@ -57,6 +57,8 @@ class puzzle():
             [self.rowCoords[i][0] for i in range(0,5)] + [self.rowCoords[4][1]] + [self.rowCoords[i][-1] for i in range(4,0-1,-1)] + [self.rowCoords[0][1]],
             [self.rowCoords[i][1] for i in range(1,3+1)] + [self.rowCoords[i][-2] for i in range(3,1-1,-1)],
         ]
+        self.ringCoords[0] = self.ringCoords[0] + self.ringCoords[0][:2] # make outer ring loopback
+        self.ringCoords[1] = self.ringCoords[1] + self.ringCoords[1][0]  # make inner ring loopback
 
         self.board = np.zeros((5,9))    # generate empty puzzle board.        
         
@@ -71,9 +73,19 @@ class puzzle():
     def check_row_sums(self):
         return [sum(self.board[i]) == 38 for i in range(0, self.board.shape[0])]
 
-    # TODO: Write this function
     def rotate_board(self):
-        newBoard = np.zeros((5,9))
-        rotateInstr = zip()
+        self.newBoard = np.zeros((5,9))        
         # NOTE: rotation can be done using self.ringCoords as a map, and shifting self.board[ring[i]] to self.board[ring[i+2]] 
         # NOTE: i+2 for outer ring, i+1 for inner ring
+
+        # rotate outer ring
+        for i in range(len(self.ringCoords[0] - 2)):
+            self.newBoard[self.ringCoords[0][i+2]] = self.board[self.ringCoords[0][i]]
+        # rotate inner ring
+        for i in range(len(self.ringCoords[1] - 1)):
+            self.newBoard[self.ringCoords[1][i+1]] = self.board[self.ringCoords[1][i]]
+
+        self.board = self.newBoard
+
+if __name__ == "__main__":
+    pass
