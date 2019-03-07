@@ -79,10 +79,10 @@ class puzzle():
         # NOTE: i+2 for outer ring, i+1 for inner ring
 
         # rotate outer ring
-        for i in range(len(self.ringCoords[0] - 2)):
+        for i in range(len(self.ringCoords[0]) - 2):
             self.newBoard[self.ringCoords[0][i+2]] = self.board[self.ringCoords[0][i]]
         # rotate inner ring
-        for i in range(len(self.ringCoords[1] - 1)):
+        for i in range(len(self.ringCoords[1]) - 1):
             self.newBoard[self.ringCoords[1][i+1]] = self.board[self.ringCoords[1][i]]
 
         self.board = self.newBoard
