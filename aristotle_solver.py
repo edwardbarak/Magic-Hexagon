@@ -1,9 +1,9 @@
 import numpy as np
-import random
 from math import floor
+from itertools import permutations, islice
 
 class puzzle():
-    def __init__(self, placements):
+    def __init__(self, placements=list(range(1,20))):
         # determine input mehtod
         # if placeType == 'percentage':
         #     self.placements = placements
@@ -95,28 +95,15 @@ class puzzle():
         self.tests += self.check_row_sums()
         self.rotate_board()
         self.tests += self.check_row_sums()
-        return {'score': sum(self.tests) / len(self.tests), 'tests': self.tests}
+        return all(self.tests)
 
-def optimizer(f='optimization_history.psv'):
-    # EXPECTS PIPE DELIMITATION 
-    # if file exists at path 'f':
-        # continue optimization from last entry
-        # continue appending results to f
-    # else:
-        # create pipe seperated values file at path 'f' with headers: score | piece_order | weights | learning_rate
-        # generate random percentage weights
-    weights = [random.uniform(0,1) for i in range(19)]
-        # generate pieces 1 through 19
-    initPieces = list(range(1,19+1))
-        # order pieces according to percentage weights
-    pieces = [initPieces.pop(floor(len(initPieces) * weight)) for weight in weights]
-    
-    # place pieces on board in designated order
-    currentBoard = puzzle(pieces)
-    # test designated order
-    result = currentBoard.validate()
-    # write results to path 'f' in .psv format
+    def reset(self, placements):
+        self.__init__(placements)
 
+def brute_force(puzzle, skip=0):
+    # create permutation
+    # slice permutation
+    pass
 
 if __name__ == "__main__":
     pass
