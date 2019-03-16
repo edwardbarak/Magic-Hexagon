@@ -100,10 +100,24 @@ class puzzle():
     def reset(self, placements):
         self.__init__(placements)
 
-def brute_force(puzzle, skip=0):
-    # create permutation
-    # slice permutation
-    pass
+def brute_force(skipTo=0, notifyPer=1000):
+    # create permutations generator
+    perms = permutations(list(range(1,19+1)), 19)
+    # skip n permutations
+    if skipTo != 0:
+        perms = islice(perms, skipTo, None)
+    
+    newBoard = puzzle()
+
+    for perm in perms:
+        newBoard.reset(perm)
+        if newBoard.validate():
+            return {'solution': perm, 'iteration': skipTo}
+        else:
+            skipTo += 1
+            if skipTo % notifyPer == 0:
+                print(skipTo, ' iterations.')
+    return 'No solution.'
 
 if __name__ == "__main__":
-    pass
+    brute_force()
