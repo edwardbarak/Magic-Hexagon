@@ -4,45 +4,11 @@ from itertools import permutations, islice
 
 class puzzle():
     def __init__(self, placements=list(range(1,20))):
-        # determine input mehtod
-        # if placeType == 'percentage':
-        #     self.placements = placements
-            
-        #     # validate self.placements
-        #     if len(self.placements) != 19:
-        #         raise Exception('Expected length of placements to be 19 instead of %i' % len(self.placements))
-            
-        #     if not all([val >= 0 and val <= 1 for val in self.placements]):
-        #         raise Exception('All values in placements must >= 0, and <= 1')
-            
-        #     # place pieces according to percentages.
-        #     # EXAMPLE:
-        #     # >>>   initialPieces = [1,2,3]
-        #     # >>>   placements = [.2, .9, .9]
-        #     # >>>   pieces = []
-        #     # results after first placement:
-        #     # >>>   initialPieces 
-        #     # [2,3]
-        #     # >>>   pieces
-        #     # [1]
-        #     # results after second placement:
-        #     # >>>   initialPieces
-        #     # [2]
-        #     # >>>   pieces
-        #     # [1,3]
-        #     self.initPieces = list(range(1,19+1)) 
-        #     self.pieces = [self.initPieces.pop(floor(len(self.initPieces) * place)) for place in self.placements]
-        #     del self.initPieces
-
-        # elif placeType == 'input':
         self.pieces = placements
         
         # validate self.pieces
         if sorted(self.pieces) != list(range(1,19+1)):
             raise Exception('Placements must be some arrangement of values in range(19+1)')
-
-        # else:
-        #     raise Exception('placeType must be string "percentage" or "input"')
 
         # initialize variables
         # coordinates for every piece in every row on the board, starting from left most piece of the top row
