@@ -1,8 +1,7 @@
 import numpy as np
-# from numba import jit
+from numba import jit, njit
 from itertools import permutations, islice
 
-# @jit
 def validate(pieces):
     """Validate if pieces are assembled in a valid configuration.
     
@@ -63,6 +62,7 @@ def brute_force(start=0, logThreshold=10000):
         if validate(current):
             return cnt, current
 
+@jit
 def rotate_pieces(ans):
     """Rotates the puzzle board.
     
@@ -86,6 +86,7 @@ def rotate_pieces(ans):
         ans[7], ans[12],ans[16]
     ])
 
+@njit
 def check_rows(ans):
     """Checks whether sums of each horizontal row is 38
     
@@ -98,17 +99,19 @@ def check_rows(ans):
     
     Returns
     -------
-    : np.array([Boolean, ..., Boolean])
-        Returns five booleans, each boolean signifying whether its corresponding row
-        sums up to 38.
+    : Boolean
+        Returns a boolean, signifying whether all 5 rows each 
+        sum up to 38.
     """ 
-    return np.array([
-        sum(ans[:3]) == 38, 
-        sum(ans[3:7]) == 38,
-        sum(ans[7:12]) == 38,
-        sum(ans[12:16]) == 38,
-        sum(ans[16:]) == 38,
+    checks = np.array([
+        np.sum(ans[:3]) == 38, 
+        np.sum(ans[3:7]) == 38,
+        np.sum(ans[7:12]) == 38,
+        np.sum(ans[12:16]) == 38,
+        np.sum(ans[16:]) == 38,
     ])
+
+    return np.all(checks)
 
 if __name__ == "__main__":
     start = 0
@@ -117,4 +120,3 @@ if __name__ == "__main__":
         print('Solution for iteration ', iteration, ':\n', solution)
         input('Press ENTER to continue.')
         start = iteration
-        
