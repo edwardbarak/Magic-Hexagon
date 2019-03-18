@@ -32,13 +32,17 @@ def validate(pieces):
     result = np.all(np.array([np.all(check_rows(config)) for config in np.array(configs)]))  
     return result
 
-def brute_force(start=0, logThreshold=10000):
+def brute_force(start=0, stop=None, logThreshold=10000):
     """Solve puzzle via brute force.
     
     Parameters
     ----------
     start : int (default = 0)
         The iteration the permutation generator should start at.
+
+    stop : int (default = None)
+        The iteration the permutation generator should stop at. 
+        None tells the generator to run until completion.
 
     logThreshold : int (default = 10000)
         The amount of iterations prior to printing a status report.
@@ -51,16 +55,19 @@ def brute_force(start=0, logThreshold=10000):
     cnt = start
     perms = permutations(list(range(1,20)), 19)
     if start != 0:
-        perms = islice(perms, start, None)
+        perms = islice(perms, start, stop)
     
-    while True:
-        current = perms.__next__()
-        cnt += 1
-        if cnt % logThreshold == 0:
-            print('Now on iteration ', cnt)
-            print('Now attempting solution: ', current)
-        if validate(current):
-            return cnt, current
+    try:
+        while True:
+            current = perms.__next__()
+            cnt += 1
+            if cnt % logThreshold == 0:
+                print('Now on iteration ', cnt)
+                print('Now attempting solution: ', current)
+            if validate(current):
+                return cnt, current
+    except StopIteration:
+        return None
 
 @jit
 def rotate_pieces(ans):
