@@ -1,8 +1,8 @@
 import numpy as np
-from numba import njit
+# from numba import jit
 from itertools import permutations
 
-@njit
+# @jit
 def validate(pieces):
     """Validate if pieces are assembled in a valid configuration.
     
@@ -21,15 +21,16 @@ def validate(pieces):
 
     ans = np.array(pieces)
     # check if pieces is a valid input
-    if sorted(ans) != np.arange(1,20):
-        raise ValueError('Pieces must be any ordering of output: list(range(1,20))')
+    if not np.array_equal(sorted(ans), np.arange(1,20)):
+        raise ValueError("""Pieces must be any ordering of the array
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]""")
    
     # create board configurations
-    configs = np.array([ans, rotate_pieces(ans)])
+    configs = [ans, rotate_pieces(ans)]
     configs.append(rotate_pieces(configs[1]))
 
     # check sums
-    result = all(np.array([all(check_rows(config)) for config in configs]))
+    result = np.all(np.array([np.all(check_rows(config)) for config in np.array(configs)]))  
     return result
 
 def brute_force():
