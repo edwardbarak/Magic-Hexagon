@@ -34,7 +34,21 @@ def validate(pieces):
     return result
 
 def brute_force(start=0, logThreshold=10000):
-    """Solve puzzle via brute force."""
+    """Solve puzzle via brute force.
+    
+    Parameters
+    ----------
+    start : int (default = 0)
+        The iteration the permutation generator should start at.
+
+    logThreshold : int (default = 10000)
+        The amount of iterations prior to printing a status report.
+    
+    Returns
+    -------
+    None        
+    """ 
+    
     cnt = start
     perms = permutations(list(range(1,20)), 19)
     if start != 0:
