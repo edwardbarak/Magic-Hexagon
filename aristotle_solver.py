@@ -1,6 +1,6 @@
 import numpy as np
 # from numba import jit
-from itertools import permutations
+from itertools import permutations, islice
 
 # @jit
 def validate(pieces):
@@ -33,9 +33,21 @@ def validate(pieces):
     result = np.all(np.array([np.all(check_rows(config)) for config in np.array(configs)]))  
     return result
 
-def brute_force():
+def brute_force(start=0, logThreshold=10000):
     """Solve puzzle via brute force."""
-    pass
+    cnt = start
+    perms = permutations(list(range(1,20)), 19)
+    if start != 0:
+        perms = islice(perms, start, None)
+    
+    while True:
+        current = perms.__next__()
+        cnt += 1
+        if cnt % logThreshold == 0:
+            print('Now on iteration ', cnt)
+            print('Now attempting solution: ', current)
+        if validate(current):
+            return cnt, current
 
 def rotate_pieces(ans):
     """Rotates the puzzle board.
@@ -83,3 +95,12 @@ def check_rows(ans):
         sum(ans[12:16]) == 38,
         sum(ans[16:]) == 38,
     ])
+
+if __name__ == "__main__":
+    start = 0
+    while True:
+        iteration, solution = brute_force(start=start)
+        print('Solution for iteration ', iteration, ':\n', solution)
+        input('Press ENTER to continue.')
+        start = iteration
+        
