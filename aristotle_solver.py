@@ -1,3 +1,5 @@
+# TODO: Add multiprocessing functionality
+
 import numpy as np
 from numba import jit, njit
 from itertools import permutations, islice
@@ -68,6 +70,8 @@ def brute_force(start=0, stop=None, logThreshold=10000):
                 return cnt, current
     except StopIteration:
         return None
+    except KeyboardInterrupt:
+        print(cnt)
 
 @jit
 def rotate_pieces(ans):
@@ -121,9 +125,9 @@ def check_rows(ans):
     return np.all(checks)
 
 if __name__ == "__main__":
-    start = 0
+    start = int(input('Start Iteration: '))
     while True:
-        iteration, solution = brute_force(start=start)
+        iteration, solution = brute_force(start=start, logThreshold=500000)
         print('Solution for iteration ', iteration, ':\n', solution)
         input('Press ENTER to continue.')
         start = iteration
