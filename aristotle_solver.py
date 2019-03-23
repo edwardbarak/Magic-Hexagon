@@ -1,55 +1,53 @@
-from numba import jit, njit
 from itertools import permutations
+from numba import njit
 import numpy as np
 
-@jit
-def solve():
-    pieces = np.arange(1,20)
-    # for each row5 in permutations(np.arange(1,20), 3) where np.sum(row5) == 38:
-    for row5 in permutations(pieces, 3):
-        if np.sum(row5) == 38:
-            # lessRow5 = np.setdiff1d(np.arange(1,20), row5)
-            lessRow5 = np.setdiff1d(pieces, row5)
-            # for each row4 in permutations(lessRow5, 4) where np.sum(row4) == 38:
-            for row4 in permutations(lessRow5, 4):
-                if np.sum(row4) == 38:
-                    # lessRow4 = np.setdiff1d(lessRow5, row4)
-                    lessRow4 = np.setdiff1d(lessRow5, row4)
-                    print('lessRow4: ', lessRow4)
-                    # for each row3 in permutations(lessRow4, 5) where np.sum(row3) == 38:
-                    for row3 in permutations(lessRow4, 5):
-                        sol81317 = np.sum([row3[0], row4[0],row5[0]])
-                        sol121619 = np.sum([row3[-1], row4[-1],row5[-1]])
-                        if np.sum(row3) == sol81317 == sol121619 == 38:
-                            # lessRow3 = np.setdiff1d(lessRow4, row3)
-                            lessRow3 = np.setdiff1d(lessRow4, row3)
-                            print('lessRow3: ', lessRow3)
-                            # for each row2 in permutations(lessRow3, 4) where np.sum(row3) == 38:
-                            for row2 in permutations(lessRow3, 4):
-                                sol491418 = np.sum([row2[0], row3[1], row4[1], row5[1]])
-                                sol7111518 = np.sum([row2[-1], row3[-2], row4[-2], row5[-2]])
-                                if np.sum(row2) == sol491418 == sol7111518 == 38:
-                                    lessRow2 = np.setdiff1d(lessRow3, 3)
-                                    print('lessRow2: ', lessRow2)
-                                    for row1 in permutations(lessRow2,3):
-                                        sol148 = np.array([row1[0], row2[0], row3[0]])
-                                        sol3712 = np.array([row1[-1], row2[-1], row3[-1]])
-                                        sol25913 = np.array([row1[1], row2[1], row3[1], row4[0]])
-                                        sol261116 = np.array([row1[-2], row2[-2], row3[-2], row4[-1]])
-                                        sol15101519 = np.array([row1[0], row2[1], row3[2], row4[2], row5[2]])
-                                        sol36101417 = np.array([row1[-1], row2[-2], row3[2], row4[1], row5[0]])
-                                        if np.sum(row1) == np.sum(sol148) == np.sum(sol3712) == np.sum(sol25913) == np.sum(sol261116) == np.sum(sol15101519) == np.sum(sol36101417) == 38:
-                                            # print(np.concatenate([row1, row2, row3, row4, row5]))
-                                            print(np.concatenate([row1, row2, row3, row4, row5]))
+def main():
+    allPieces = np.arange(1,20)
+    
+    # all possible permutations for row 1
+    perms = np.array(list(permutations(allPieces, 3)))
+    
+    # all possible permutations for row 1 where the sum is 38
+    perms = [np.array(perm, dtype=np.int8) for perm in perms if np.array(perm, dtype=np.int8).sum() == 38]
+    
+    # append all possible row 5 permutations whose sum is 38 to their respective row 1 permutations
+    for i in range(len(perms)):
+        _diff = np.setdiff1d(allPieces, np.array(perms[i], dtype=np.int8))
+        _r5s = np.array([np.array(perm, dtype=np.int8) for perm in permutations(_diff, 3) if np.array(perm, dtype=np.int8).sum() == 38])
+        perms[i] = [perms[i], _r5s]
 
-@njit
-def solve_r5(perms):
-    # return [row5 for row5 in perms if np.sum(row5) == 38]
-    for row5 in perms:
-        if np.sum(row5) == 38:
-            print(row5)
+    # flatten perms so that each value in perms is an array of length 19, 
+    # with positions that don't have pieces placed represented by zeros.
+    _perms = []
+    _zeros = np.zeros(13,dtype=np.int8)
+    
+    for i in range(len(perms)):
+        for j in range(len(perms[i][1])):
+            # _perms.append(list(perms[i][0]) + [0] * 13 + list(perms)[i][1][j])
+            _perms.append(np.concatenate([perms[i][0], _zeros, perms[i][1][j]]))
+    perms = _perms
+    
+    # convert perms so that all permutations using leftover pieces for 
+    # positions 3, 7, & 12 sum up correctly to their respective permutations
+    _perms = []
+    _cntr = 0
+    for perm in perms:        
+        _diff = np.setdiff1d(allPieces, perm)
+        for perm3712 in permutations(_diff, 3):
+            _cntr += 1
+            if _cntr % 10000 == 0: print(_cntr)
 
+            pieces037 = np.sum(perm[0] + perm3712[0] + perm3712[1], dtype=np.int8)
+            pieces71217 = np.sum(perm[17] + perm3712[2] + perm3712[1], dtype=np.int8)
+            if pieces037 == pieces71217 == np.int8(38):
+                _perm = perm[[3, 7, 12]] = np.array(perm3712, dtype=np.int8)
+                _perms.append(_perm)
+    perms = _perms
 
-def solve_r4(r5):
-    pieces = np.arange(1,20)
-    pass
+    return perms
+
+def test3712(perms):
+    allPieces = np.array(np.arange(1,20), dtype=np.int8)
+    perms = np.array(perms, dtype=np.int8)
+    _diff = np.setdiff1d(allPieces, perm)
