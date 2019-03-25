@@ -73,6 +73,8 @@ def solve(runtime=False):
         # get pos14 at perm[17]. use pos16 @ perm[5], pos15 @ perm[16], and pos13 @ perm[9]
         perms = np.append(perms, (38 - perms[:,[5,16,9]].sum(axis=1))[:,None], axis=1)
         perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
+        # get pos10
+        perms = np.append(perms, np.array([np.setdiff1d(allPieces, perm)[0] for perm in perms], dtype=np.int8)[:,None], axis=1)
 
     except KeyboardInterrupt:
         pass
