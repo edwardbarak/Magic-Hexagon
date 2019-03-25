@@ -11,6 +11,8 @@ def solve(runtime=False):
     allPieces = np.arange(1,20, dtype=np.int8)
     
     try:    
+        # OUTER RING CALCULATIONS
+
         # generate all possible permutations of pieces in pos 1,2,3
         perms = np.array(tuple(permutations(allPieces, 3)), dtype=np.int8)
         # only keep permutations where pieces in pos 1,2,3 sum up to 38
@@ -40,6 +42,29 @@ def solve(runtime=False):
         # all perms where the piece in pos4 hasn't already been used in a different pos
         _pos4notUsed = np.array([perm[-1] not in perm[:-1] for perm in perms])
         perms = perms[np.where(_pos4notUsed)]
+
+        # INNER RING CALCULATIONS
+        # solve for pos5, pos9
+        # _perms for pos5, pos9
+        # get leftover pieces for each sequence
+        _diff_func = lambda x: np.setdiff1d(allPieces, x)
+        _diff = np.apply_along_axis(_diff_func, 1, perms)
+        # get permutations of leftover pieces
+        _getNewPerms = lambda x: np.array(tuple(permutations(x, 2)), dtype=np.int8)
+        _newperms = np.apply_along_axis(_getNewPerms, 1, _diff)
+        # append _newperms to perms
+        perms = np.repeat(perms, _newperms.shape[1], axis=0)
+        _newperms = _newperms.reshape(np.prod(_newperms.shape[:2]), _newperms.shape[2])
+        perms = np.append(perms, _newperms, axis=1)
+        # keep all perms where 38 - sum(pos2,pos13) == pos5 + pos9
+        # pos2 = perm[1], pos13 = perm[9] 
+        perms = perms[np.where(38 - perms[:,[1, 9]].sum(axis=1) == perms[:,-2:].sum(axis=1))]
+        # get pos6
+        # where 38 - sum(pos4, pos5, pos7) in setdiff(allPieces) 
+        # pos4 = perm[11], pos5 = perm[12], pos7 = perm[3]
+        _diff = np.apply_along_axis(_diff_func, 1, perms)
+        perms = perms[np.where(38 - perms[:,[11,12,3]].sum(axis=1) in _diff)]        
+        
 
     except KeyboardInterrupt:
         pass
