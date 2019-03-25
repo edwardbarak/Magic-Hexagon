@@ -81,3 +81,39 @@ def solve(runtime=False):
 
     if runtime: elapsed(start)
     return perms
+
+def test(solutions, runtime=False, report=False):
+    if runtime: start = time()
+
+    results = np.array([38 
+    # test 3s
+    == s[:3].sum() 
+    == s[2:5].sum() 
+    == s[4:7].sum()
+    == s[6:9].sum()
+    == s[8:11].sum()
+    == s[[0,10,11]].sum()
+    # test 4s
+    == s[[1,13,12,9]].sum()
+    == s[[9,17,16,5]].sum()
+    == s[[5,15,14,1]].sum()
+    == s[[11,12,17,7]].sum()
+    == s[[7,16,15,3]].sum()
+    == s[[3,14,13,11]].sum()
+    # test 5s
+    == s[[10,12,18,15,4]].sum()
+    == s[[0,13,18,16,6]].sum()
+    == s[[2,14,18,17,8]].sum()
+    for s in solutions]).astype(np.int8)
+
+    if runtime: elapsed(start)
+    if report: 
+        correct = results.sum()
+        incorrect = results.shape[0] - correct
+        score = float(correct) / results.shape[0]
+        print('Correct solutions: {}\nIncorrect Solutions: {}\nScore: {}').format(correct, incorrect, score)
+
+    return results
+
+def reorganize(solutions, order=[0,1,2,11,13,14,3,10,12,18,15,4,9,17,16,5,8,7,6]):    
+    return np.array([solution[order] for solution in solutions], dtype=np.int8)
