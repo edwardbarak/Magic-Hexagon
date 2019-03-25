@@ -77,9 +77,9 @@ def solve(runtime=True):
         perms = np.append(perms, np.array([np.setdiff1d(allPieces, perm)[0] for perm in perms], dtype=np.int8)[:,None], axis=1)
         results = perms[np.nonzero(test(perms, False, False))]
         
-
     except KeyboardInterrupt:
-        pass
+        if runtime: elapsed(start)        
+        return None
 
     if runtime: elapsed(start)
     return reorganize(results)
