@@ -42,6 +42,10 @@ def solve(runtime=False):
         # find valid pieces for the following positions, two at a time, in sequential order: ((7,12), (16,19), (18,17), (13,8))
         for i in range(4):
             # get all possible permutations for next 2 positions, appeneded to their respective sequences
+            # TODO: Optimize line below. 95% of runtime spent here!!
+            # NOTE: for perm in perms, get setdiff; get permutations(setdiff,2); ...
+            # NOTE: locs = np.where(np.array(perm[-1] + permutations).sum() == 38); ...
+            # NOTE: combined = np.crossProduct(perms[locs], permutations[locs]); combined.reshape(2d);
             perms = [[np.append(perm, np.array(newperm, dtype=np.int8)) for newperm in permutations(np.setdiff1d(allPieces, perm), 2)] for perm in perms]
             perms = np.array(perms)
             # print(perms.shape)
@@ -52,6 +56,8 @@ def solve(runtime=False):
             perms = perms[np.where(perms[:,-3:].sum(axis=1) == 38)]
             print(perms.shape)
             
+        # find piece for position 4
+        # TODO: if 38 - perm[[0,-1]].sum() in setdiff then add perm to perms
 
         return perms
         # # all possible permutations of pos 7, 12, appended to respective permutation sequence
