@@ -58,13 +58,21 @@ def solve(runtime=False):
         perms = np.append(perms, _newperms, axis=1)
         # keep all perms where 38 - sum(pos2,pos13) == pos5 + pos9
         # pos2 = perm[1], pos13 = perm[9] 
-        perms = perms[np.where(38 - perms[:,[1, 9]].sum(axis=1) == perms[:,-2:].sum(axis=1))]
+        perms = perms[np.where(38 - perms[:,[1, 9]].sum(axis=1) == perms[:,-2:].sum(axis=1))]        
         # get pos6
         # where 38 - sum(pos4, pos5, pos7) in setdiff(allPieces) 
-        # pos4 = perm[11], pos5 = perm[12], pos7 = perm[3]
-        _diff = np.apply_along_axis(_diff_func, 1, perms)
-        perms = perms[np.where(38 - perms[:,[11,12,3]].sum(axis=1) in _diff)]        
-        
+        # pos4 = perm[11], pos5 = perm[13], pos7 = perm[3]
+        perms = np.append(perms, (38 - perms[:,[11,13,3]].sum(axis=1))[:,None], axis=1)
+        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
+        # get pos11 at perm[15]. use pos2 @ perm[1], pos6 @ perm[14], and pos16 @ perm[5]
+        perms = np.append(perms, (38 - perms[:,[1,14,5]].sum(axis=1))[:,None], axis=1)
+        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
+        # get pos15 at perm[16]. use pos7 @ perm[3], pos18 @ perm[7], and pos11 @ perm[15]
+        perms = np.append(perms, (38 - perms[:,[3,7,15]].sum(axis=1))[:,None], axis=1)
+        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
+        # get pos14 at perm[17]. use pos16 @ perm[5], pos15 @ perm[16], and pos13 @ perm[9]
+        perms = np.append(perms, (38 - perms[:,[5,16,9]].sum(axis=1))[:,None], axis=1)
+        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
 
     except KeyboardInterrupt:
         pass
