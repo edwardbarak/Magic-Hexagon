@@ -6,7 +6,7 @@ import numpy as np
 
 elapsed = lambda start: print('\nTime: %s' % (time() - start))
 
-def solve(runtime=False):
+def solve(runtime=True):
     if runtime: start = time()
     allPieces = np.arange(1,20, dtype=np.int8)
     
@@ -75,14 +75,16 @@ def solve(runtime=False):
         perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
         # get pos10
         perms = np.append(perms, np.array([np.setdiff1d(allPieces, perm)[0] for perm in perms], dtype=np.int8)[:,None], axis=1)
+        results = perms[np.nonzero(test(perms, False, False))]
+        
 
     except KeyboardInterrupt:
         pass
 
     if runtime: elapsed(start)
-    return perms
+    return reorganize(results)
 
-def test(solutions, runtime=False, report=False):
+def test(solutions, runtime=True, report=True):
     if runtime: start = time()
 
     results = np.array([38 
@@ -111,7 +113,7 @@ def test(solutions, runtime=False, report=False):
         correct = results.sum()
         incorrect = results.shape[0] - correct
         score = float(correct) / results.shape[0]
-        print('Correct solutions: {}\nIncorrect Solutions: {}\nScore: {}').format(correct, incorrect, score)
+        print('Correct solutions: {}\nIncorrect Solutions: {}\nScore: {}'.format(correct, incorrect, score))
 
     return results
 
