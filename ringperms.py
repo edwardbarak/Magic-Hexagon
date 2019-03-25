@@ -28,9 +28,19 @@ def solve(runtime=False):
             perms = perms[np.where(perms[:,-3:].sum(axis=1) == 38)]
             
         # find piece for position 4
-        # TODO: if 38 - perm[[0,-1]].sum() in setdiff then add perm to perms
+        # append result of 38 - (pos1 + pos8) to every row
+        # calculate what pos4 must be
+        _pos4diffs = np.subtract(38, perms[:,[0,-1]].sum(axis=1)).astype(np.int8)
+        # check if pos4 <= 19, since no piece larger than 19 exists
+        _isBetween1and19 = _pos4diffs <= 19
+        # all perms and pos4 where pos4 <= 19,
+        _pos4diffs = _pos4diffs[np.where(_isBetween1and19)]
+        perms = perms[np.where(_isBetween1and19)]
+        perms = np.append(perms, _pos4diffs[:,None], axis=1)
+        # all perms where the piece in pos4 hasn't already been used in a different pos
+        _pos4notUsed = np.array([perm[-1] not in perm[:-1] for perm in perms])
+        perms = perms[np.where(_pos4notUsed)]
 
-        
     except KeyboardInterrupt:
         pass
 
