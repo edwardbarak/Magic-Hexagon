@@ -62,18 +62,23 @@ def solve(runtime=True):
         # get pos6
         # where 38 - sum(pos4, pos5, pos7) in setdiff(allPieces) 
         # pos4 = perm[11], pos5 = perm[13], pos7 = perm[3]
-        perms = np.append(perms, (38 - perms[:,[11,13,3]].sum(axis=1))[:,None], axis=1)
-        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
-        # get pos11 at perm[15]. use pos2 @ perm[1], pos6 @ perm[14], and pos16 @ perm[5]
-        perms = np.append(perms, (38 - perms[:,[1,14,5]].sum(axis=1))[:,None], axis=1)
-        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
-        # get pos15 at perm[16]. use pos7 @ perm[3], pos18 @ perm[7], and pos11 @ perm[15]
-        perms = np.append(perms, (38 - perms[:,[3,7,15]].sum(axis=1))[:,None], axis=1)
-        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
-        # get pos14 at perm[17]. use pos16 @ perm[5], pos15 @ perm[16], and pos13 @ perm[9]
-        perms = np.append(perms, (38 - perms[:,[5,16,9]].sum(axis=1))[:,None], axis=1)
-        perms = perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
-        # get pos10
+        
+        # Solve for positions 6, 11, 14, & 15
+        placeDifference = lambda perms, x, y, z: np.append(perms, (38 - perms[:,[x,y,z]].sum(axis=1))[:,None], axis=1)
+        placeDifferenceValidation = lambda perms: perms[np.where(np.array([np.unique(perm).shape == perm.shape for perm in perms], dtype=np.int8))]
+                
+        dependents = [
+            [11,13,3], # position  6 dependents
+            [1,14,5],  # position 11 dependents
+            [3,7,15],  # position 14 dependents
+            [5,16,9],  # position 15 dependents
+            ]
+        
+        for i in dependents:
+            perms = placeDifference(perms, i[0], i[1], i[2])
+            perms = placeDifferenceValidation(perms)
+
+        # Solve for position 10
         perms = np.append(perms, np.array([np.setdiff1d(allPieces, perm)[0] for perm in perms], dtype=np.int8)[:,None], axis=1)
         results = perms[np.nonzero(test(perms, False, False))]
         
