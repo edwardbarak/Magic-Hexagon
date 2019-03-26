@@ -7,31 +7,30 @@ import numpy as np
 elapsed = lambda start: print('\nTime: %s' % (time() - start))
 
 def solve(runtime=True):
-    if runtime: start = time()
-    allPieces = np.arange(1,20, dtype=np.int8)
+    # Initializations
+    if runtime: start = time()    
     
+    # Settings
+    allPieces = np.arange(1,20, dtype=np.int8)
+
     try:    
         # OUTER RING CALCULATIONS
-
-        # generate all possible permutations of pieces in pos 1,2,3
-        perms = np.array(tuple(permutations(allPieces, 3)), dtype=np.int8)
-        # only keep permutations where pieces in pos 1,2,3 sum up to 38
+        # Generate all possible choices for positions 1, 2, & 3
+        _newperms = permutations(allPieces, 3)
+        perms = np.array(tuple(_newperms), dtype=np.int8)
+        # Filter out choices where where pieces in positions 1, 2, & 3 do not sum up to 38
         perms = perms[np.where(np.sum(perms, axis=1) == 38)]        
-        # find valid pieces for the following positions, two at a time, in sequential order: ((7,12), (16,19), (18,17), (13,8))
+        
+        # Find the remaining pieces for the outer ring
         for i in range(4):
-            # get all possible permutations for next 2 positions, appeneded to their respective sequences
-            # get all possible permutations of perms for one of the pairs of positions mentioned above
+            # Find possible choices for the next 2 pieces
             _newperms = np.array([tuple(permutations(np.setdiff1d(allPieces, perm), 2)) for perm in perms], dtype=np.int8)
-            # merge perms with their new respective permutations
-            perms = np.array([np.repeat([perm], _newperms.shape[1], axis=0) for perm in perms])
-            perms = np.append(perms, _newperms, axis=2)
-            perms = perms.reshape(np.prod(perms.shape[:2]), perms.shape[2])
-            # only keep permutations where the last 3 calculated pieces sum up to 38
-            perms = perms[np.where(perms[:,-3:].sum(axis=1) == 38)]
+            perms = np.array([np.repeat([perm], _newperms.shape[1], axis=0) for perm in perms]) # Transform
+            perms = np.append(perms, _newperms, axis=2)                                         # Transform
+            perms = perms.reshape(np.prod(perms.shape[:2]), perms.shape[2])                     # Transform
+            perms = perms[np.where(perms[:,-3:].sum(axis=1) == 38)]                             # Filter
             
-        # find piece for position 4
-        # append result of 38 - (pos1 + pos8) to every row
-        # calculate what pos4 must be
+        # Find the final piece of the outer ring
         _pos4diffs = np.subtract(38, perms[:,[0,-1]].sum(axis=1)).astype(np.int8)
         # check if pos4 <= 19, since no piece larger than 19 exists
         _isBetween1and19 = _pos4diffs <= 19
