@@ -116,3 +116,6 @@ def test(solutions, runtime=True, report=True):
 
 def reorganize(solutions, order=[0,1,2,11,13,14,3,10,12,18,15,4,9,17,16,5,8,7,6]):    
     return np.array([solution[order] for solution in solutions], dtype=np.int8)
+
+if __name__ == "__main__":
+    print(solve(True))
