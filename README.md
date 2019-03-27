@@ -1,4 +1,4 @@
-# Aristotle's Puzzle
+# Magic Hexagon
 ![*What the puzzle looks like.*](./images/newaristotle-1-of-2.jpg)
 
 > **Description**
@@ -26,6 +26,17 @@ If you go by the image above, it calculates the pieces in the following order:
 10. Tile 2
 11. Tile 4
 12. Tile 5
+
+## Equations
+### Functions
+1. ![f(x)](./images/magic-hexagon-fx.png)
+2. ![g(x)](./images/magic-hexagon-gx.png)
+3. ![h(x)](./images/magic-hexagon-hx.png)
+
+### Main Equation
+![main1of2](./images/magic-hexagon-main1.png)
+![main2of2](./images/magic-hexagon-main2.png)
+
 
 ## The Result
 On my laptop, I'm able to get 12 solutions in  ~13s +/- 1s.
