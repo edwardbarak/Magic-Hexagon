@@ -50,23 +50,7 @@ Run main.py from your command line using <code>python main.py</code>
 **Why did you do this?**
 Someone gave me this puzzle as a present, and I thought it was an interesting challenge.
 
-**Why didn't you use Cython/Numba/pypy?**
-- **Cython:** Too lazy to learn the syntax
-- **Numba:** nopython mode does not like arrays larger than 1 dimmension. Not worth the hassle to figure out how to do everything using only 1 dimmensional arrays.
-- **pypy:** My benchmarks were better in vanilla python.
-
-**Why didn't you use C/C++/Java?**
-- numpy compiles to C
-- numpy allows you to do static typing
-- I'd rather use Python than shave off a second or two with a non-interpretive language. Python's just a really productive language, ok?
-
-**What is brute.py?**
-Desperation.
-
-**Super slow Python can't calculate 121 quadrillion permutations in less than 15 seconds!?! On a laptop?!?!! \*foaming from mouth\***
-Ok.
-
-## Some peformance tips for Python users:
+## Some peformance tips and lessons learned:
 - Most numpy functions compile to C. 
 - You can do static typing with numpy.
 - Loops kill your performance. Use list comprehensions instead. 
