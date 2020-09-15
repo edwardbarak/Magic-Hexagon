@@ -40,12 +40,12 @@ If you go by the image above, it calculates the pieces in the following order:
 
 ## The Result
 On my laptop, I'm able to get 12 solutions in  ~13s +/- 1s.
-I won't post the answers here, but if you really want to know the answers, you can obviously just run the program using <code>python ringperms.py</code>
+I won't post the answers here, but if you really want to know the answers, you can obviously just run the program using <code>python main.py</code>
 
 ## FAQ
 
 **How do I run this?**
-Run ringperms.py from your command line using <code>python ringperms.py</code>
+Run main.py from your command line using <code>python main.py</code>
 
 **Why did you do this?**
 Someone gave me this puzzle as a present, and I thought it was an interesting challenge.
