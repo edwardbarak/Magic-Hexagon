@@ -45,7 +45,11 @@ I won't post the answers here, but if you really want to know the answers, you c
 ## FAQ
 
 **How do I run this?**
-Run main.py from your command line using <code>python main.py</code>
+1. Clone this repository
+- In the directory, run <code>pip install -r requirements.txt</code>
+- Run main.py from your command line using <code>python main.py</code>
+
+Depending on the specifications of the computer you are using, the code may take a few seconds to run. The output shows a list of arrays contained valid solutions.
 
 **Why did you do this?**
 Someone gave me this puzzle as a present, and I thought it was an interesting challenge.
