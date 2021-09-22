@@ -20,7 +20,7 @@ defer==1.0.6
 distlib==0.3.1
 distro==1.4.0
 distro-info===0.23ubuntu1
-Django==3.0.8
+Django==3.1.13
 docker==4.1.0
 docker-compose==1.25.0
 dockerpty==0.4.1
