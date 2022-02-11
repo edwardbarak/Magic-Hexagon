@@ -57,7 +57,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 pop-transition==1.0.1
 prompt-toolkit==3.0.5
-protobuf==3.6.1
+protobuf==3.15.0
 ptyprocess==0.6.0
 pycairo==1.16.2
 pycups==1.9.73
